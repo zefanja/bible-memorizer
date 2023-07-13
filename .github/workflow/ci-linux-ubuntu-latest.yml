@@ -1,0 +1,42 @@
+name: "Bible Memorizer"
+
+on:
+    push:
+        branches: ["master"]
+    pull_request:
+        branches: ["**"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                python-version: ["3.10", "3.11"]
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v1
+              with:
+                  python-version: ${{ matrix.python-version }}
+
+            - name: Upgrade pip
+              run: |
+                  python -m pip install --upgrade pip
+
+            - name: Install poetry
+              uses: snok/install-poetry@v1
+
+            - name: Install all dependencies
+              run: |
+                  poetry install --no-interaction
+
+            - name: Run lint tasks
+              run: |
+                  poetry run invoke lint
+
+            - name: Run tests
+              run: |
+                  poetry run invoke test

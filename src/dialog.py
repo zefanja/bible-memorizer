@@ -8,7 +8,6 @@ from .model import get_bm_model
 from .gen_notes import add_notes
 
 
-
 class BmDialog(qt.QDialog):
     def __init__(self, mw, parent=None) -> None:
         super().__init__(parent)
@@ -38,7 +37,6 @@ class BmDialog(qt.QDialog):
         self.text_box_label.setText("Enter your bible text:")
         self.text_edit = qt.QPlainTextEdit()
 
-        
         # OK/Cancel buttons
         self.button_box = qt.QDialogButtonBox(
             qt.QDialogButtonBox.StandardButton.Ok
@@ -57,7 +55,7 @@ class BmDialog(qt.QDialog):
         layout.addWidget(self.text_box_label)
         layout.addWidget(self.text_edit)
         layout.addWidget(self.button_box)
-    
+
         self.setLayout(layout)
 
 
@@ -71,6 +69,6 @@ def bm_action() -> None:
         text = dialog.text_edit.toPlainText()
         did = dialog.deckchooser.selectedId()
 
-        add_notes(mw.col, Note, title, recite, text, did)     
+        add_notes(mw.col, Note, title, recite, text, did)
 
     dialog.deckchooser.cleanup()

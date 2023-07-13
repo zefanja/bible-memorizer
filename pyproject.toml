@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "bible-memorizer"
+version = "0.1.0"
+description = "Anki add-on focused on Bible memorisation"
+authors = ["zefanja <github@zefanjas.de>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "bible_memorizer"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+black = "^23.7.0"
+
+
+[tool.poetry.group.add.dependencies]
+invoke = "^2.2.0"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pre-commit = "^3.3.3"
+markdown2 = "^2.4.9"
+pyright = "^1.1.317"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__"]
