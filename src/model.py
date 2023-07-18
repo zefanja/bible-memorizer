@@ -66,22 +66,22 @@ def create_model(mw):
     t = mm.newTemplate("Card 1")
     t[
         "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<div class="back">{{back}}</div>'
+    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}\n{{first_letters}}</div>\n</div>'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{answer}}</div>\n'
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 2")
     t[
         "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{first_letters}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<div class="back">{{answer}}</div>\n'
+    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="table">{{table}}</div>\n</div>'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{answer}}</div>\n'
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 3")
     t[
         "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="table">{{table}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<div class="back">{{answer}}</div>\n'
+    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{back}}</div>'
     mm.addTemplate(m, t)
 
     mm.add(m)
@@ -101,8 +101,8 @@ def get_bm_model(aqt):
             )
         )
         m = create_model(mw)
-    m["css"] = dedent(_styling).strip()
-    m["sortf"] = _field_names.index(_sort_field)
+    #m["css"] = dedent(_styling).strip()
+    #m["sortf"] = _field_names.index(_sort_field)
 
     # Add new fields if they don't exist yet
     fields_to_add = [
