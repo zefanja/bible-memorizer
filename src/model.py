@@ -67,21 +67,21 @@ def create_model(mw):
     t[
         "qfmt"
     ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}\n{{first_letters}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{answer}}</div>\n'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 2")
     t[
         "qfmt"
     ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="table">{{table}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{answer}}</div>\n'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 3")
     t[
         "qfmt"
     ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id='answer'>\n<div class="back">{{back}}</div>'
+    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
     mm.addTemplate(m, t)
 
     mm.add(m)
