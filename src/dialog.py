@@ -1,4 +1,3 @@
-import aqt
 from aqt import qt
 from aqt.deckchooser import DeckChooser
 from aqt import mw
@@ -62,7 +61,7 @@ class BmDialog(qt.QDialog):
 def bm_action() -> None:
     dialog = BmDialog(mw)
     dialog.title_box.setFocus()
-    model = get_bm_model(aqt)
+    model = get_bm_model()
     if dialog.exec():
         title = dialog.title_box.text().strip()
         recite = dialog.recite_box.value()

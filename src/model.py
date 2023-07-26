@@ -1,5 +1,8 @@
+import aqt
+
 from aqt.utils import askUser, showInfo
 from textwrap import dedent
+
 
 _field_names = [
     "answer",
@@ -53,7 +56,13 @@ _styling = """
            background-color: yellow;
     }
 """
-
+_card1_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}\n{{first_letters}}</div>\n</div>'
+_card1_back ='{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
+_card2_front = '{{#table}}\n<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="table">{{table}}</div>\n</div>\n{{/table}}'
+_card2_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
+_card3_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
+_card3_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
+_current_version = "1.1"
 
 def create_model(mw):
     mm = mw.col.models
@@ -64,35 +73,38 @@ def create_model(mw):
         mm.addField(m, fm)
 
     t = mm.newTemplate("Card 1")
-    t[
-        "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}\n{{first_letters}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
+    t["qfmt"] = _card1_front
+    t["afmt"] = _card1_back
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 2")
-    t[
-        "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="table">{{table}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
+    t["qfmt"] = _card2_front
+    t["afmt"] = _card2_back
     mm.addTemplate(m, t)
 
     t = mm.newTemplate("Card 3")
-    t[
-        "qfmt"
-    ] = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
-    t["afmt"] = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
+    t["qfmt"] = _card3_front
+    t["afmt"] = _card3_back
     mm.addTemplate(m, t)
 
     mm.add(m)
     m["css"] = dedent(_styling).strip()
     m["sortf"] = _field_names.index(_sort_field)
     mw.col.models.save(m)
+    aqt.mw.col.set_config('bm_model_version', _current_version)
     return m
 
+def upgradeonedotone(mw, mod):
+    print("Upgrading to 1.1...")
+    mod['tmpls'][1]['qfmt'] = _card2_front
+    mw.col.models.save(mod)
 
-def get_bm_model(aqt):
+def get_bm_model():
     mw = aqt.mw
+
+    if mw.col is None:
+        return
+
     m = mw.col.models.by_name(_model_name)
     if not m:
         aqt.mw.taskman.run_on_main(
@@ -101,6 +113,14 @@ def get_bm_model(aqt):
             )
         )
         m = create_model(mw)
+
+    # check if template needs to be upgraded:
+    current_version = aqt.mw.col.get_config('bm_model_version', default="none")
+    if current_version == "none":
+        upgradeonedotone(mw, m)
+        aqt.mw.col.set_config('bm_model_version', "1.1")
+
+
     #m["css"] = dedent(_styling).strip()
     #m["sortf"] = _field_names.index(_sort_field)
 

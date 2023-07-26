@@ -128,7 +128,10 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
     sorted_data = sort_by_verse_number(data)
 
     for idx, d in enumerate(data):
-        html = create_html_table(sorted_data, d["verse_number"], d["verse_part"])
+        html = ""
+        if len(sorted_data) > 4:
+            html = create_html_table(sorted_data, d["verse_number"], d["verse_part"])
+
         front, back = get_verses(data, d["verse_number"], d["verse_part"], recite)
 
         n = note_constructor(col, col.models.by_name("Bible Memorizer"))
