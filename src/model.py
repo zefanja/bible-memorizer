@@ -13,7 +13,7 @@ _field_names = [
     "back",
     "first_letters",
     "title",
-    "id",
+    "id"
 ]
 _model_name = "Bible Memorizer"
 _sort_field = "id"
@@ -27,12 +27,12 @@ _styling = """
     }
 
     .back {
-            color: blue;
-         font-style: italic;
+        color: blue;
+        font-style: italic;
     }
 
     .table {
-            font-size: 16px
+        font-size: 16px
     }
 
     table {
@@ -53,7 +53,15 @@ _styling = """
     }
 
     .highlight {
-           background-color: yellow;
+        background-color: yellow;
+    }
+
+    .card.nightMode {
+        background-color: #333;
+    }
+
+    .nightMode .back {
+        color: yellow;
     }
 """
 _card1_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}\n{{first_letters}}</div>\n</div>'
@@ -62,7 +70,7 @@ _card2_front = '{{#table}}\n<div id="card">\n<div>{{title}}</div>\n<div class="p
 _card2_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
 _card3_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
 _card3_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
-_current_version = "1.1"
+_current_version = "1.2"
 
 def create_model(mw):
     mm = mw.col.models
@@ -99,6 +107,20 @@ def upgradeonedotone(mw, mod):
     mod['tmpls'][1]['qfmt'] = _card2_front
     mw.col.models.save(mod)
 
+def upgradeonedottwo(mw, mod):
+    print("Upgrading to 1.2...")
+    _css = """
+        .card.nightMode {
+            background-color: #333;
+        }
+
+        .nightMode .back {
+            color: yellow;
+        }
+    """
+    mod["css"] = f'{mod["css"]}\n\n{dedent(_css).strip()}'
+    mw.col.models.save(mod)
+
 def get_bm_model():
     mw = aqt.mw
 
@@ -118,7 +140,12 @@ def get_bm_model():
     current_version = aqt.mw.col.get_config('bm_model_version', default="none")
     if current_version == "none":
         upgradeonedotone(mw, m)
-        aqt.mw.col.set_config('bm_model_version', "1.1")
+        upgradeonedottwo(mw, m)
+        aqt.mw.col.set_config('bm_model_version', _current_version)
+
+    if current_version == "1.1":
+        upgradeonedottwo(mw, m)
+        aqt.mw.col.set_config('bm_model_version', _current_version)
 
 
     #m["css"] = dedent(_styling).strip()

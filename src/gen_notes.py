@@ -1,24 +1,25 @@
 #!/usr/bin/env python3
-
+import time
 
 def read_data(text):
     data = text.splitlines()
 
     data_out = []
     verse_number = 1
-    verse_parts = ["a", "b", "c", "d", "e"]
+    verse_parts = ["a", "b", "c", "d", "e", "f"]
     verse_part = 0
+    back_chars = [")", ",", ";", ".", "!", "?", "’", "”", "«", "‹", "\""]
+    front_chars = ["\"", "'", "`", "(", "»", "›", "“", "‘"]
 
     for line in data:
         new_line = line.replace("\n", "")
         split = new_line.split()
         out = ""
-        special = [")", ",", ";"]
         for s in split:
             s = s.strip()
-            if s[0] == "(":
+            if s[0] in front_chars:
                 out += s[0] + s[1]
-            elif s[-1] in special:
+            elif s[-1] in back_chars:
                 out += s[0] + s[-1]
             elif len(s) > 2 and s[-2] == ")":
                 out += s[0] + s[-2]
@@ -144,6 +145,8 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
         n["front"] = front
         n["back"] = back
         n["first_letters"] = d["first_letters"]
-        n["id"] = str(idx)
+
+        ms = int(time.time()*1000)
+        n["id"] = f"{ms}-{str(idx)}"
 
         col.addNote(n)
