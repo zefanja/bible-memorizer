@@ -32,7 +32,9 @@ _styling = """
     }
 
     .table {
-        font-size: 16px
+        font-size: 16px;
+        margin: auto;
+        max-width: 600px;
     }
 
     table {
@@ -70,7 +72,7 @@ _card2_front = '{{#table}}\n<div id="card">\n<div>{{title}}</div>\n<div class="p
 _card2_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{answer}}</div>\n'
 _card3_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
 _card3_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
-_current_version = "1.2"
+_current_version = "1.3"
 
 def create_model(mw):
     mm = mw.col.models
@@ -121,6 +123,11 @@ def upgradeonedottwo(mw, mod):
     mod["css"] = f'{mod["css"]}\n\n{dedent(_css).strip()}'
     mw.col.models.save(mod)
 
+def upgradeonedotthree(mw, mod):
+    print("Upgrading to 1.3...")
+    mod["css"] = dedent(_styling).strip()
+    mw.col.models.save(mod)
+
 def get_bm_model():
     mw = aqt.mw
 
@@ -141,10 +148,16 @@ def get_bm_model():
     if current_version == "none":
         upgradeonedotone(mw, m)
         upgradeonedottwo(mw, m)
+        upgradeonedotthree(mw, m)
         aqt.mw.col.set_config('bm_model_version', _current_version)
 
     if current_version == "1.1":
         upgradeonedottwo(mw, m)
+        upgradeonedotthree(mw, m)
+        aqt.mw.col.set_config('bm_model_version', _current_version)
+
+    if current_version == "1.2":
+        upgradeonedotthree(mw, m)
         aqt.mw.col.set_config('bm_model_version', _current_version)
 
 
