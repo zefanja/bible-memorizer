@@ -8,7 +8,7 @@ def read_data(text):
     verse_number = 1
     verse_parts = ["a", "b", "c", "d", "e", "f"]
     verse_part = 0
-    back_chars = [")", ",", ";", ".", "!", "?", "’", "”", "«", "‹", "\""]
+    back_chars = [")", ",", ";", ".", "!", "?", "’", "”", "«", "‹", "\"", ":"]
     front_chars = ["\"", "'", "`", "(", "»", "›", "“", "‘"]
 
     for line in data:
