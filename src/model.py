@@ -136,11 +136,7 @@ def get_bm_model():
 
     m = mw.col.models.by_name(_model_name)
     if not m:
-        aqt.mw.taskman.run_on_main(
-            lambda: aqt.mw.progress.update(
-                label="Bible Memorizer note type not found. Creating..."
-            )
-        )
+        print("Bible Memorizer note type not found. Creating...")
         m = create_model(mw)
 
     # check if template needs to be upgraded:
@@ -171,16 +167,14 @@ def get_bm_model():
         if field_name not in mw.col.models.field_names(m)
     ]
     if fields_to_add:
-        aqt.mw.taskman.run_on_main(
-            lambda: showInfo(
-                """
-                <p>The Bible Memorizer Addon has recently been upgraded to include the following attributes: {}</p>
-                <p>This change will require a full-sync of your card database to your Anki-Web account.</p>
-                """.format(
-                    ", ".join(fields_to_add)
-                )
+        print("""
+            <p>The Bible Memorizer Addon has recently been upgraded to include the following attributes: {}</p>
+            <p>This change will require a full-sync of your card database to your Anki-Web account.</p>
+            """.format(
+                ", ".join(fields_to_add)
             )
         )
+
         for field_name in fields_to_add:
             pass
             fm = mw.col.models.newField(_(field_name))
