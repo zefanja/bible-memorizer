@@ -1,47 +1,61 @@
 #!/usr/bin/env python3
 import time
+import re
 
-def read_data(text):
-    data = text.splitlines()
+import re
+import string
 
-    data_out = []
-    verse_number = 1
-    verse_parts = ["a", "b", "c", "d", "e", "f"]
-    verse_part = 0
-    back_chars = [")", ",", ";", ".", "!", "?", "’", "”", "«", "‹", "\"", ":"]
-    front_chars = ["\"", "'", "`", "(", "»", "›", "“", "‘"]
+def replace_last_letter_with_underscore(text):
+    def process_word(word):
+        return word[:-1] + '_' if len(word) > 0 else ''
 
-    for line in data:
-        new_line = line.replace("\n", "")
-        split = new_line.split()
-        out = ""
-        for s in split:
-            s = s.strip()
-            if s[0] in front_chars:
-                out += s[0] + s[1]
-            elif s[-1] in back_chars:
-                out += s[0] + s[-1]
-            elif len(s) > 2 and s[-2] == ")":
-                out += s[0] + s[-2]
-            elif s[0].isnumeric():
-                verse_number = int(s)
-                verse_part = 0
-                continue
-            else:
-                out += s[0]
-            out += " "
-        data_out.append(
-            {
-                "first_letters": out,
-                "verse_number": verse_number,
-                "verse_part": verse_parts[verse_part],
-                "answer": new_line,
-            }
-        )
+    tokens = re.findall(r'\b\w+\b|[^\w\s]|\s+', text)
 
-        verse_part += 1
+    return ''.join(process_word(t) if re.match(r'\b\w+\b', t) else t for t in tokens)
+#!/usr/bin/python3
+def keep_first_letter_only(text):
+    def process_word(word):
+        return word[0] if len(word) > 0 else ''
 
-    return data_out
+    tokens = re.findall(r'\b\w+\b|[^\w\s]|\s+', text)
+
+    return ''.join(process_word(t) if re.match(r'\b\w+\b', t) else t for t in tokens)
+
+def process_lines(text):
+    lines = text.splitlines()
+    current_verse = "0"
+    subline_index = 0
+    result = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue  # skip empty lines
+
+        match = re.match(r'^\s*(\d+)\s+(.*)', line)
+        if match:
+            current_verse = match.group(1)
+            subline_index = 0
+            content = match.group(2)
+        else:
+            content = stripped
+
+        letter = string.ascii_lowercase[subline_index % 26]
+
+        last_letters_removed = replace_last_letter_with_underscore(content)
+        first_letter_only = keep_first_letter_only(content)
+
+        result.append({
+                "first_letters": first_letter_only,
+                "last_letters": last_letters_removed,
+                "verse_number": current_verse,
+                "verse_part": letter,
+                "answer": line.strip(),
+
+            })
+        subline_index += 1
+
+    return result
 
 
 def sort_by_verse_number(data):
@@ -123,14 +137,14 @@ def get_verses(data, verse_number, verse_part, amount=2):
     return front, back
 
 
-def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id: int):
-    data = read_data(text)
+def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id: int, table: bool):
+    data = process_lines(text)
 
     sorted_data = sort_by_verse_number(data)
 
     for idx, d in enumerate(data):
         html = ""
-        if len(sorted_data) > 4:
+        if len(sorted_data) > 4 and table:
             html = create_html_table(sorted_data, d["verse_number"], d["verse_part"])
 
         front, back = get_verses(data, d["verse_number"], d["verse_part"], recite)
@@ -145,8 +159,9 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
         n["front"] = front
         n["back"] = back
         n["first_letters"] = d["first_letters"]
+        n["last_letters"] = d["last_letters"]
 
-        ms = int(time.time()*1000)
+        ms = int(time.time() * 1000)
         n["id"] = f"{ms}-{str(idx)}"
 
         col.addNote(n)

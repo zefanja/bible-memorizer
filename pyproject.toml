@@ -1,11 +1,10 @@
 [tool.poetry]
 name = "bible-memorizer"
-version = "0.1.0"
+version = "0.2.0"
 description = "Anki add-on focused on Bible memorisation"
 authors = ["zefanja <github@zefanjas.de>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "bible_memorizer"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
