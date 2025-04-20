@@ -90,7 +90,7 @@ _card3_back = (
 _card4_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
 _card4_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
 
-_current_version = "1.4"
+_current_version = "1.5"
 
 
 def create_model(mw):
@@ -184,6 +184,26 @@ def upgradeonedotfour(mw, mod):
 
     mw.col.models.save(mod)
 
+def upgradeonedotfive(mw, mod):
+    print("Upgrading to 1.5...")
+
+    mod["tmpls"][0]["qfmt"] = _card2_front
+    mod["tmpls"][0]["afmt"] = _card2_back
+
+    mod["tmpls"][1]["qfmt"] = _card3_front
+    mod["tmpls"][1]["afmt"] = _card3_back
+
+    mod["tmpls"][2]["qfmt"] = _card4_front
+    mod["tmpls"][2]["afmt"] = _card4_back
+
+    mod["tmpls"][3]["qfmt"] = _card1_front
+    mod["tmpls"][3]["afmt"] = _card1_back
+
+    mm = mw.col.models
+    mm.reposition_template(mod, mod["tmpls"][3], 0)
+
+    mw.col.models.save(mod)
+
 def get_bm_model():
     mw = aqt.mw
 
@@ -202,6 +222,7 @@ def get_bm_model():
         upgradeonedottwo(mw, m)
         upgradeonedotthree(mw, m)
         upgradeonedotfour(mw, m)
+        upgradeonedotfive(mw, m)
         aqt.mw.col.set_config("bm_model_version", _current_version)
 
     if current_version == "1.1":
@@ -215,6 +236,11 @@ def get_bm_model():
 
     if current_version == "1.3":
         upgradeonedotfour(mw, m)
+        upgradeonedotfive(mw, m)
+        aqt.mw.col.set_config("bm_model_version", _current_version)
+
+    if current_version == "1.4":
+        upgradeonedotfive(mw, m)
         aqt.mw.col.set_config("bm_model_version", _current_version)
 
 
