@@ -8,7 +8,6 @@
 3. Copy your scripture into the text box. Each new line is a new note. It is best to add a line break after each verse (one verse per line) or to break the verse into several parts (one part per line). You should include the verse number at the beginning of each new verse.
 4. For every note there are three cards (or four if you checked the box "Create Table").
 
-
 ## Screenshots
 
 Tools → Bible Memorizer
@@ -30,3 +29,6 @@ Card 2
 Card 3
 
 ![image](https://raw.githubusercontent.com/zefanja/bible-memorizer/master/docs/card3.png)
+
+## Known Issues
+If you used and installed this add-on before April 2025 you may have some empty cards. You can remove them with Tools → Empty Cards.
