@@ -50,7 +50,7 @@ def process_lines(text):
                 "last_letters": last_letters_removed,
                 "verse_number": current_verse,
                 "verse_part": letter,
-                "answer": line.strip(),
+                "answer": content,
 
             })
         subline_index += 1
