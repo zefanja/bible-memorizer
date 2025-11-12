@@ -36,7 +36,7 @@ class BmDialog(qt.QDialog):
 
         # text box
         self.text_box_label = qt.QLabel()
-        self.text_box_label.setText("Enter your bible text:")
+        self.text_box_label.setText("Enter your bible text (For best results, put a verse numbers at the beginning of each verse):")
         self.text_edit = qt.QPlainTextEdit()
 
         # OK/Cancel buttons
