@@ -74,6 +74,8 @@ def bm_action() -> None:
         did = dialog.deckchooser.selectedId()
         table = dialog.checkbox.isChecked()
 
-        add_notes(mw.col, Note, title, recite, text, did, table)
+        number = add_notes(mw.col, Note, title, recite, text, did, table)
+
+        qt.QMessageBox.information(mw, "Bible Memorizer", f"Notes added: {number}")
 
     dialog.deckchooser.cleanup()

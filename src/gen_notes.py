@@ -165,3 +165,5 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
         n["id"] = f"{ms}-{str(idx)}"
 
         col.addNote(n)
+
+    return len(data)
