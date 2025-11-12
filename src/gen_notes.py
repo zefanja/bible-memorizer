@@ -12,7 +12,7 @@ def replace_last_letter_with_underscore(text):
     tokens = re.findall(r'\b\w+\b|[^\w\s]|\s+', text)
 
     return ''.join(process_word(t) if re.match(r'\b\w+\b', t) else t for t in tokens)
-#!/usr/bin/python3
+
 def keep_first_letter_only(text):
     def process_word(word):
         return word[0] if len(word) > 0 else ''
