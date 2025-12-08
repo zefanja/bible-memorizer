@@ -7,25 +7,18 @@ from .dialog import bm_action
 from .model import get_bm_model
 from .fix_last_letters import fill_last_letters_for_notes
 
+CONF_KEY_ENABLE_FIX = "enable_fix_old_notes"
 
 def show_dialog() -> None:
     bm_action()
 
-
 def echo_mode_normal():
-    """Return a cross-Qt echo mode for 'normal'."""
-    # Qt5: QLineEdit.Normal
-    # Qt6: QLineEdit.EchoMode.Normal
     try:
-        return QLineEdit.Normal  # Qt5
+        return QLineEdit.Normal
     except AttributeError:
-        return QLineEdit.EchoMode.Normal  # Qt6
+        return QLineEdit.EchoMode.Normal
 
 def _prompt_search_query(default: str = "") -> str | None:
-    """
-    Ask the user for a Browser-like search query, e.g., 'deck:MyDeck note:Basic tag:xyz'.
-    Returns None if canceled.
-    """
     text, ok = QInputDialog.getText(
         mw, "Bible Memorizer - Fix old notes",
         "Search (Browser query, e.g. deck:MyDeck note:Type tag:mask):",
@@ -33,11 +26,7 @@ def _prompt_search_query(default: str = "") -> str | None:
     )
     return text if ok else None
 
-
 def run_on_search():
-    """
-    Tools menu action: ask for a search query; run on matching notes.
-    """
     query = _prompt_search_query("")
     if query is None:
         return
@@ -48,19 +37,14 @@ def run_on_search():
         return
 
     processed, updated = fill_last_letters_for_notes(nids)
-    mw.reset()  # refresh UI
+    mw.reset()
     QMessageBox.information(
         mw,
         "Bible Memorizer - Fix old notes",
         f"Processed notes: {processed}\nUpdated (last_letters was empty): {updated}"
     )
 
-
 def run_on_selected(browser):
-    """
-    Browser context menu action: run on currently selected notes in the browser.
-    """
-
     sel_method = getattr(browser, "selected_notes", None) or getattr(browser, "selectedNotes")
     nids = sel_method()
 
@@ -76,38 +60,32 @@ def run_on_selected(browser):
         f"Processed selection: {processed}\nUpdated (last_letters was empty): {updated}"
     )
 
-
 def on_browser_context_menu(menu, browser):
-    """
-    Hook to extend the Browser right-click menu.
-    """
     action = QAction("Bible Memorizer - Fix old notes (selected)", browser)
     action.triggered.connect(lambda: run_on_selected(browser))
     menu.addAction(action)
 
-
 def add_tools_menu_action():
-    """
-    Add a Tools menu item.
-    """
     a = QAction("Bible Memorizer - Fix old notes", mw)
     a.triggered.connect(run_on_search)
     mw.form.menuTools.addAction(a)
 
+# --- Initialisierung & Config ---
 
-if "pytest" not in sys.modules:
+def init_addon():
     action = QAction("Bible Memorizer - Import", mw)
     qconnect(action.triggered, show_dialog)
     mw.form.menuTools.addAction(action)
 
     gui_hooks.profile_did_open.append(get_bm_model)
 
-        addon_package = __name__.split('.')[0]
-    config = mw.addonManager.getConfig(addon_package)
-
+    config = mw.addonManager.getConfig(__name__)
     if config is None:
-        config = {"enable_fix_old_notes": False}
+        config = {CONF_KEY_ENABLE_FIX: False}
 
-    if config.get("enable_fix_old_notes"):
+    if config.get(CONF_KEY_ENABLE_FIX, False):
         gui_hooks.browser_will_show_context_menu.append(on_browser_context_menu)
         add_tools_menu_action()
+
+if "pytest" not in sys.modules:
+    init_addon()
