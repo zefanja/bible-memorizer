@@ -102,6 +102,12 @@ if "pytest" not in sys.modules:
 
     gui_hooks.profile_did_open.append(get_bm_model)
 
-    gui_hooks.browser_will_show_context_menu.append(on_browser_context_menu)
-    add_tools_menu_action()
+        addon_package = __name__.split('.')[0]
+    config = mw.addonManager.getConfig(addon_package)
 
+    if config is None:
+        config = {"enable_fix_old_notes": False}
+
+    if config.get("enable_fix_old_notes"):
+        gui_hooks.browser_will_show_context_menu.append(on_browser_context_menu)
+        add_tools_menu_action()
