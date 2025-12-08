@@ -94,7 +94,7 @@ def create_html_table(data, verse_number, verse_part="a"):
             ):
                 highlight = "class='highlight'"
 
-            td += f"<span {highlight}>{vers['first_letters']}</span>"
+            td += f"<span {highlight}>{vers['first_letters']} </span>"
 
         td += "</td>"
         html += td
