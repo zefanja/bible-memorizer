@@ -1,19 +1,17 @@
 # Bible Memorizer Configuration
 
-# Bible Memorizer Configuration
-
-**enable_fix_old_notes**: Set this to `true` to enable the tools for fixing old notes in the 'Tools' menu.
+**enable_fix_old_notes**: Set to `true` to enable the "Fix old notes" tool in the Tools menu. *(Default: false)*
 
 ## Recite Chapter
 
-**recite_initial_visible**: Wie viele Verse beim Öffnen des Recite-Dialogs sichtbar sind. *(Default: 2)*
+**recite_initial_visible**: Number of verses visible when the Recite dialog opens. *(Default: 2)*
 
-**recite_reveal_step**: Anzahl Verse, die mit `Space` / `→` zusätzlich aufgedeckt werden. *(Default: 2)*
+**recite_reveal_step**: Number of verses revealed with `Space` / `→`. *(Default: 2)*
 
-**recite_big_step**: Anzahl Verse, die mit `Shift+Space` / `Shift+→` zusätzlich aufgedeckt werden. *(Default: 5)*
+**recite_big_step**: Number of verses revealed with `Shift+Space` / `Shift+→`. *(Default: 5)*
 
-**recite_young_threshold_days**: Wenn das Intervall der `last_letters`-Karte unter diesem Wert liegt (oder die Karte new/learning/relearning ist), startet der Vers in Stufe **last_letters**. *(Default: 1)*
+**recite_young_threshold_days**: If the interval of the `last_letters` card is below this value (or the card is new/learning/relearning), the verse starts at stage **last_letters**. *(Default: 1)*
 
-**recite_mature_threshold_days**: Ab diesem Intervall wird der Vers in Stufe **nur Versnummer** angezeigt. Zwischen `young` und `mature` → **first_letters**. *(Default: 21)*
+**recite_mature_threshold_days**: At or above this interval the verse starts at stage **verse number only**. Between `young` and `mature` threshold → **first_letters**. *(Default: 21)*
 
 *(Changes require a restart of Anki)*
