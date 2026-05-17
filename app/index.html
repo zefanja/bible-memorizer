@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bible Memorizer</title>
+    <meta
+      name="description"
+      content="Erstelle ein Anki-Paket, um Bibelverse Wort für Wort zu lernen – ohne Anki-Addon."
+    />
+
+    <!-- Fonts: Newsreader (Serif) für Headings & Bibeltext, Geist für UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap"
+    />
+
+    <!-- App-Styles -->
+    <link rel="stylesheet" href="./css/styles.css" />
+
+    <!-- Libraries: sql.js + JSZip (über CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  </head>
+
+  <body>
+    <div class="shell">
+      <!-- Header -->
+      <header class="site-header">
+        <div>
+          <h1 class="site-title" data-i18n="header.title">Bible Memorizer</h1>
+          <p class="site-subtitle" data-i18n="header.subtitle">
+            Erstelle in 60 Sekunden ein Anki-Paket, um Bibelverse Wort für Wort
+            zu lernen.
+          </p>
+        </div>
+        <label class="lang-switcher">
+          <span data-i18n="lang.label">Sprache</span>
+          <select id="lang-select" data-i18n-aria-label="lang.label">
+            <option value="de" data-i18n="lang.de">Deutsch</option>
+            <option value="en" data-i18n="lang.en">English</option>
+          </select>
+        </label>
+      </header>
+
+      <div class="divider"></div>
+
+      <!-- Titel -->
+      <section class="section">
+        <label class="section-label" for="title-input" data-i18n="step.title.label">
+          Titel
+        </label>
+        <input
+          id="title-input"
+          class="input-field"
+          type="text"
+          autocomplete="off"
+          data-i18n-placeholder="step.title.placeholder"
+        />
+        <p class="hint" data-i18n="step.title.hint">
+          Erscheint oben auf jeder Karte und wird der Deckname.
+        </p>
+      </section>
+
+      <!-- Bibeltext -->
+      <section class="section">
+        <label class="section-label" for="text-area" data-i18n="step.text.label">
+          Bibeltext
+        </label>
+        <textarea
+          id="text-area"
+          class="input-field"
+          spellcheck="false"
+          data-i18n-placeholder="step.text.placeholder"
+        ></textarea>
+        <div class="text-actions">
+          <button id="format-btn" class="btn" type="button" data-i18n="step.text.actions.format">
+            Verse automatisch trennen
+          </button>
+          <button id="example-btn" class="btn" type="button" data-i18n="step.text.actions.example">
+            Beispieltext einfügen
+          </button>
+          <button id="clear-btn" class="btn btn-ghost" type="button" data-i18n="step.text.actions.clear">
+            Leeren
+          </button>
+        </div>
+        <p class="hint" data-i18n="step.text.hint">
+          Tipp: einfach den Text aus deiner Lieblingsbibel-App kopieren. Der
+          Zeilenumbruch vor jeder Versnummer wird automatisch gesetzt.
+        </p>
+      </section>
+
+      <!-- Live-Vorschau der erkannten Verse -->
+      <section class="section">
+        <h2 class="section-label" data-i18n="step.preview.title">Erkannte Verse</h2>
+        <div class="preview-card">
+          <div id="preview-meta" class="preview-meta"></div>
+          <table class="preview-table">
+            <tbody id="preview-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Erweiterte Einstellungen -->
+      <section class="section">
+        <details class="advanced">
+          <summary data-i18n="advanced.toggle">Erweiterte Einstellungen</summary>
+          <div class="advanced-body">
+            <div>
+              <label class="field-inline">
+                <span>
+                  <strong data-i18n="advanced.recite.label">
+                    Kontextzeilen pro Karte
+                  </strong>
+                </span>
+                <input
+                  id="recite-input"
+                  class="input-field"
+                  type="number"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value="2"
+                />
+              </label>
+              <p class="hint" data-i18n="advanced.recite.hint">
+                Wie viele Zeilen vor und nach dem aktuellen Vers auf der Karte
+                mitgezeigt werden.
+              </p>
+            </div>
+
+            <label class="checkbox-row">
+              <input id="table-checkbox" type="checkbox" />
+              <span class="checkbox-row-text">
+                <strong data-i18n="advanced.table.label">
+                  Übersichtstabelle als zusätzliche Karte erstellen
+                </strong>
+                <small data-i18n="advanced.table.hint">
+                  Erzeugt eine Karte mit allen Erstbuchstaben aller Verse.
+                  Nur bei mehr als 4 Versen sinnvoll.
+                </small>
+              </span>
+            </label>
+          </div>
+        </details>
+      </section>
+
+      <!-- Kartenvorschau -->
+      <section class="section">
+        <h2 class="section-label" data-i18n="cards.preview.title">
+          So sehen deine Karten aus
+        </h2>
+        <p class="hint" data-i18n="cards.preview.hint" style="margin-top: 0; margin-bottom: var(--space-4);">
+          Vorschau der ersten Notiz. Jeder Notiz erzeugt bis zu vier Karten.
+        </p>
+        <div id="cards-preview" class="cards-preview"></div>
+      </section>
+
+      <!-- Download -->
+      <section class="download-section">
+        <button id="download-btn" class="btn btn-primary" type="button" data-i18n="download.button">
+          Anki-Paket herunterladen
+        </button>
+        <div id="download-status"></div>
+      </section>
+
+      <!-- How-to -->
+      <section class="section">
+        <div class="howto">
+          <h2 data-i18n="howto.title">Was du danach in Anki tust</h2>
+          <ol>
+            <li data-i18n="howto.step1">
+              Datei doppelklicken oder in Anki über „Datei → Importieren…“ öffnen.
+            </li>
+            <li data-i18n="howto.step2">
+              Ein neuer Deck mit dem Titel deiner Wahl erscheint – sofort
+              lernbereit.
+            </li>
+            <li data-i18n="howto.step3">
+              Wenn du das Original-Addon installierst, kannst du jederzeit
+              weitere Verse mit gleichem Format ergänzen.
+            </li>
+          </ol>
+          <a
+            href="https://github.com/zefanja/bible-memorizer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n="howto.pluginLink"
+          >
+            Original-Addon auf GitHub
+          </a>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="site-footer">
+        <span>
+          <span data-i18n="footer.builtFor">Offizielles Web-Tool für </span>
+          <a
+            href="https://github.com/zefanja/bible-memorizer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n="footer.pluginName"
+            >zefanja/bible-memorizer</a
+          >
+        </span>
+      </footer>
+    </div>
+
+    <!-- App-Logik -->
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

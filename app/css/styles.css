@@ -1,0 +1,567 @@
+/* =========================================================================
+   Bible Memorizer Web – Stylesheet
+   =========================================================================
+   Designprinzip: klar, funktional, ruhig. Eine ausdrucksstarke Serif für
+   Überschriften und Bibeltext, eine moderne Sans für UI.
+   ========================================================================= */
+
+/* ---------- Reset / Basis ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  /* Farbpalette: papierhafte Töne mit gedämpftem Tinten-Akzent */
+  --bg: #faf8f4;
+  --bg-elev: #ffffff;
+  --bg-subtle: #f2efe8;
+  --ink: #1a1a1a;
+  --ink-soft: #44423d;
+  --ink-mute: #807c73;
+  --line: #e3dfd5;
+  --line-strong: #c9c3b4;
+  --accent: #2d3e50; /* tiefes Tintenblau */
+  --accent-soft: #4a6178;
+  --accent-on: #ffffff;
+  --warn: #8b4a1f;
+  --ok: #2f6342;
+  --error: #9b2c2c;
+
+  /* Spacing-Skala */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --radius: 6px;
+  --radius-lg: 10px;
+
+  --shadow-1: 0 1px 0 rgba(0, 0, 0, 0.04);
+  --shadow-2: 0 8px 24px -12px rgba(45, 62, 80, 0.18);
+
+  --max-content: 880px;
+
+  --font-serif: "Newsreader", "Source Serif Pro", Georgia, serif;
+  --font-sans: "Geist", "Inter Tight", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--accent-soft);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ---------- Layout ---------- */
+
+.shell {
+  max-width: var(--max-content);
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-5) var(--space-8);
+}
+
+@media (max-width: 640px) {
+  .shell {
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-5);
+  margin-bottom: var(--space-7);
+}
+
+.site-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: clamp(2rem, 4vw + 1rem, 3.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--space-3);
+  color: var(--ink);
+}
+
+.site-subtitle {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 50ch;
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+}
+
+.lang-switcher select {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.5rem;
+  color: var(--ink);
+}
+
+/* ---------- Sections ---------- */
+
+.section {
+  margin-bottom: var(--space-7);
+}
+
+.section-label {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  font-weight: 500;
+  margin: 0 0 var(--space-2);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.section-label::before {
+  content: "";
+  display: inline-block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.hint {
+  margin: var(--space-2) 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-mute);
+}
+
+/* ---------- Form-Elemente ---------- */
+
+.input-field {
+  width: 100%;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  font-size: 1.05rem;
+  font-family: var(--font-serif);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 62, 80, 0.12);
+}
+
+textarea.input-field {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.7;
+  min-height: 13rem;
+  resize: vertical;
+}
+
+.text-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.btn:hover {
+  background: var(--bg-subtle);
+  color: var(--ink);
+}
+
+.btn-ghost {
+  border-color: transparent;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-on);
+  border-color: var(--accent);
+  font-size: 1rem;
+  padding: 0.85rem 1.6rem;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+  box-shadow: var(--shadow-2);
+}
+.btn-primary:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+  color: var(--accent-on);
+}
+.btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- Vorschau (erkannte Verse) ---------- */
+
+.preview-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.preview-meta {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-subtle);
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+}
+
+.preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-serif);
+}
+
+.preview-table td {
+  padding: 0.55rem var(--space-4);
+  border-bottom: 1px solid var(--line);
+  vertical-align: baseline;
+}
+.preview-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.preview-vn {
+  width: 4rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+  white-space: nowrap;
+  padding-right: var(--space-3);
+}
+
+.preview-part {
+  color: var(--accent-soft);
+  margin-left: 0.15rem;
+}
+
+.preview-continuation .preview-vn {
+  color: transparent;
+  user-select: none;
+}
+.preview-continuation .preview-text {
+  color: var(--ink-soft);
+}
+
+.preview-text {
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.preview-empty {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--ink-mute);
+  font-style: italic;
+}
+
+/* ---------- Erweiterte Einstellungen ---------- */
+
+.advanced {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+}
+
+.advanced > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.advanced > summary::-webkit-details-marker {
+  display: none;
+}
+.advanced > summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  color: var(--ink-mute);
+  font-size: 1.1rem;
+}
+.advanced[open] > summary::after {
+  content: "–";
+}
+
+.advanced-body {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.field-inline .input-field {
+  width: 5rem;
+  font-family: var(--font-mono);
+  text-align: center;
+  font-size: 1rem;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.2rem;
+  accent-color: var(--accent);
+}
+
+.checkbox-row-text strong {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.checkbox-row-text small {
+  color: var(--ink-mute);
+  font-size: 0.85rem;
+}
+
+/* ---------- Kartenvorschau ---------- */
+
+.cards-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+
+@media (max-width: 720px) {
+  .cards-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cards-preview-empty {
+  grid-column: 1 / -1;
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--ink-mute);
+  font-style: italic;
+  background: var(--bg-elev);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.card-preview {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-preview-title {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 var(--space-3);
+  font-weight: 500;
+}
+
+.card-preview-skipped {
+  font-size: 0.88rem;
+  color: var(--ink-mute);
+  font-style: italic;
+  margin: 0;
+}
+
+.card-sides {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.card-side-label {
+  font-size: 0.72rem;
+  color: var(--ink-mute);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-1);
+}
+
+.card-frame {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  min-height: 6rem;
+}
+
+/* ---------- Download-Bereich ---------- */
+
+.download-section {
+  text-align: center;
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--line);
+}
+
+#download-btn {
+  min-width: 18rem;
+}
+
+#download-status {
+  margin-top: var(--space-3);
+  font-size: 0.9rem;
+  min-height: 1.2em;
+  color: var(--ink-mute);
+}
+#download-status[data-kind="success"] {
+  color: var(--ok);
+}
+#download-status[data-kind="error"] {
+  color: var(--error);
+}
+#download-status[data-kind="info"] {
+  color: var(--accent-soft);
+}
+
+/* ---------- How-to ---------- */
+
+.howto {
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+}
+
+.howto h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin: 0 0 var(--space-4);
+  color: var(--ink);
+}
+
+.howto ol {
+  margin: 0 0 var(--space-4);
+  padding-left: 1.2em;
+}
+
+.howto li {
+  margin-bottom: var(--space-2);
+  color: var(--ink-soft);
+}
+
+.howto li::marker {
+  color: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--ink-mute);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+/* ---------- Lade-Indikator für Cards Preview Shadow Host ---------- */
+
+.card-shadow-host {
+  display: block;
+}
+
+/* Dezenter "geöffneter Bibel"-Akzent unter dem Header */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--line-strong) 20%,
+    var(--line-strong) 80%,
+    transparent
+  );
+  margin: 0 0 var(--space-7);
+}
