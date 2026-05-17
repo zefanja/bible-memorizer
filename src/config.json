@@ -1,3 +1,8 @@
 {
-    "enable_fix_old_notes": false
+    "enable_fix_old_notes": false,
+    "recite_initial_visible": 2,
+    "recite_reveal_step": 2,
+    "recite_big_step": 5,
+    "recite_mature_threshold_days": 21,
+    "recite_young_threshold_days": 1
 }

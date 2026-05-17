@@ -142,6 +142,7 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
 
     sorted_data = sort_by_verse_number(data)
 
+    ms = int(time.time() * 1000)
     for idx, d in enumerate(data):
         html = ""
         if len(sorted_data) > 4 and table:
@@ -161,7 +162,6 @@ def add_notes(col, note_constructor, title: str, recite: int, text: str, deck_id
         n["first_letters"] = d["first_letters"]
         n["last_letters"] = d["last_letters"]
 
-        ms = int(time.time() * 1000)
         n["id"] = f"{ms}-{str(idx)}"
 
         col.addNote(n)

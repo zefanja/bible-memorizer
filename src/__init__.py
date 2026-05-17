@@ -6,6 +6,7 @@ from aqt.utils import qconnect
 from .dialog import bm_action
 from .model import get_bm_model
 from .fix_last_letters import fill_last_letters_for_notes
+from .recite import show_recite_dialog
 
 CONF_KEY_ENABLE_FIX = "enable_fix_old_notes"
 
@@ -76,6 +77,10 @@ def init_addon():
     action = QAction("Bible Memorizer - Import", mw)
     qconnect(action.triggered, show_dialog)
     mw.form.menuTools.addAction(action)
+
+    recite_action = QAction("Bible Memorizer - Recite Chapter", mw)
+    qconnect(recite_action.triggered, show_recite_dialog)
+    mw.form.menuTools.addAction(recite_action)
 
     gui_hooks.profile_did_open.append(get_bm_model)
 
