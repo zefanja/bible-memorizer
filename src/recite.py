@@ -361,6 +361,7 @@ class ReciteDialog(QDialog):
 
         initial_visible = max(1, _cfg_int("recite_initial_visible"))
         self.visible_count = min(initial_visible, len(self.notes)) if self.notes else 0
+        self.default_stage = self.stages[self.visible_count - 1] if self.visible_count > 0 else STAGE_LAST_LETTERS
 
         self._build_ui()
         self._bind_shortcuts()
@@ -451,24 +452,22 @@ class ReciteDialog(QDialog):
         if not self.notes:
             return
         old_count = self.visible_count
-        new_stage = self.stages[old_count - 1] if old_count > 0 else STAGE_VERSE_NUMBER
         self.visible_count = min(self.visible_count + self.step, len(self.notes))
         for i in range(old_count):
             self.stages[i] = STAGE_FULL
         for i in range(old_count, self.visible_count):
-            self.stages[i] = new_stage
+            self.stages[i] = self.default_stage
         self.refresh(scroll_to_bottom=True)
 
     def reveal_more_big(self) -> None:
         if not self.notes:
             return
         old_count = self.visible_count
-        new_stage = self.stages[old_count - 1] if old_count > 0 else STAGE_VERSE_NUMBER
         self.visible_count = min(self.visible_count + self.big_step, len(self.notes))
         for i in range(old_count):
             self.stages[i] = STAGE_FULL
         for i in range(old_count, self.visible_count):
-            self.stages[i] = new_stage
+            self.stages[i] = self.default_stage
         self.refresh(scroll_to_bottom=True)
 
     def reveal_less(self) -> None:
@@ -478,14 +477,15 @@ class ReciteDialog(QDialog):
         self.refresh()
 
     def upgrade_last(self) -> None:
-        for i in range(self.visible_count - 1, -1, -1):
+        for i in range(self.visible_count):
             if self.stages[i] < STAGE_FULL:
                 self.stages[i] += 1
+                self.default_stage = self.stages[i]
                 self.refresh()
                 return
 
     def downgrade_last(self) -> None:
-        for i in range(self.visible_count - 1, -1, -1):
+        for i in range(self.visible_count):
             if self.stages[i] > STAGE_VERSE_NUMBER:
                 self.stages[i] -= 1
                 self.refresh()
@@ -504,6 +504,7 @@ class ReciteDialog(QDialog):
         initial_visible = max(1, _cfg_int("recite_initial_visible"))
         self.visible_count = min(initial_visible, len(self.notes))
         self.stages = list(self.initial_stages)
+        self.default_stage = self.stages[self.visible_count - 1]
         self.refresh()
 
     # ----- Bridge (Klick auf Vers) -----

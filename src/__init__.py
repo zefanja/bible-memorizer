@@ -78,7 +78,7 @@ def init_addon():
     qconnect(action.triggered, show_dialog)
     mw.form.menuTools.addAction(action)
 
-    recite_action = QAction("Bible Memorizer - Recite Chapter", mw)
+    recite_action = QAction("Bible Memorizer - Recite Text", mw)
     qconnect(recite_action.triggered, show_recite_dialog)
     mw.form.menuTools.addAction(recite_action)
 
