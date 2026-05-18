@@ -60,6 +60,7 @@ class BmDialog(qt.QDialog):
         layout.addWidget(self.button_box)
 
         self.setLayout(layout)
+        self.resize(700, 600)
 
 
 def bm_action() -> None:

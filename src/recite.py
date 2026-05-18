@@ -304,7 +304,6 @@ class ReciteChooserDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Bible Memorizer – Recite Chapter")
-        self.resize(520, 180)
 
         self.batches = find_batches()
 
