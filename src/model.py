@@ -89,6 +89,9 @@ _card3_back = (
 )
 _card4_front = '<div id="card">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n<br>\n<div class="front">{{front}}</div>\n</div>'
 _card4_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">{{back}}</div>'
+# TODO: The front now contains the verse but also the verse number. A new field must be generated that includes the verse without the verse number
+_card5_front = '<div id="card">\n<div>{{answer}}</div>\n</div>'
+_card5_back = '{{FrontSide}}\n<br>\n<hr id="answer">\n<div class="back">\n<div>{{title}}</div>\n<div class="passage">{{verse_number}}{{verse_part}}</div>\n</div>\n'
 
 _current_version = "1.5"
 
@@ -119,6 +122,11 @@ def create_model(mw):
     t = mm.new_template("Card 4")
     t["qfmt"] = _card4_front
     t["afmt"] = _card4_back
+    mm.addTemplate(m, t)
+
+    t = mm.new_template("Card 5")
+    t["qfmt"] = _card5_front
+    t["afmt"] = _card5_back
     mm.addTemplate(m, t)
 
     mm.add(m)
@@ -243,6 +251,7 @@ def get_bm_model():
         upgradeonedotfive(mw, m)
         aqt.mw.col.set_config("bm_model_version", _current_version)
 
+    # TODO: Add upgrade for Card 5 template
 
     # Add new fields if they don't exist yet
     fields_to_add = [
